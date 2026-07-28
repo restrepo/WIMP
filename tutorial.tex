@@ -1,0 +1,276 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm,
+}
+
+\title{\textbf{NeMO-C 2024: Dark Matter Tutorial}\\ \Large Solving the Boltzmann Equation}
+\author{Nicolás Bernal \\ NYU Abu Dhabi}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{I.9 Solving the Boltzmann Equation}
+
+Solve numerically the Boltzmann equation for the dark matter (DM) number density $n$
+\begin{equation} 
+\label{eq:I.15}
+    \frac{dn}{dt} + 3 H n = -\langle \sigma v \rangle \left( n^2 - n_{\text{eq}}^2 \right),
+\end{equation}
+corresponding to the case of 2-to-2 DM annihilations into standard model (SM) states. Assume i) a Universe dominated by SM radiation, ii) conservation of the SM entropy, and iii) an $s$-wave (i.e. constant) thermally-averaged annihilation cross section $\langle \sigma v \rangle$.
+
+\vspace{0.5cm}
+\noindent \textit{Hints:}
+\begin{enumerate}
+    \item \textit{i)} implies that the Hubble expansion rate as a function of the SM temperature $T$ is
+    \begin{equation} \label{eq:I.16}
+        H(T) = \sqrt{\frac{\rho_R(T)}{3 M_P^2}} \, ,
+    \end{equation}
+    with the SM energy density given by
+    \begin{equation} \label{eq:I.17}
+        \rho_R(T) = \frac{\pi^2}{30} g_\star(T) T^4 \, ,
+    \end{equation}
+    $M_P \simeq 2.4 \times 10^{18}$ GeV is the reduced Planck mass and $g_\star(T)$ is the number of relativistic degrees of freedom that contributes to the energy density of the SM. As a first approximation, take, e.g. $g_\star = 106.75$. It is a good number for temperatures higher than the top mass.
+    
+    \item For the DM number density in equilibrium (without chemical potential), use the Maxwell-Boltzmann approximation
+    \begin{equation} \label{eq:I.18}
+        n_{\text{eq}}(T) = \frac{g}{2\pi^2} m^2 T \, K_2\left(\frac{m}{T}\right),
+    \end{equation}
+    where $m$ is the mass of the DM, $g$ is the number of internal degrees of freedom of the DM particle, and $K_i$ the modified Bessel function of the second order.
+    
+    \item Given \textit{i)} and \textit{ii)}, Eq.~(\ref{eq:I.15}) can be conveniently rewritten as, see Appendix~\ref{sec:yieldBE}
+    \begin{equation} \label{eq:I.19}
+        \frac{dY}{dx} = -\frac{\langle \sigma v \rangle s}{x H} \left[ Y^2 - (Y^{\text{eq}})^2 \right],
+    \end{equation}
+    where $x \equiv m/T$, $Y(T) \equiv n(T)/s(T)$, and $Y^{\text{eq}}(T) \equiv n_{\text{eq}}(T)/s(T)$, with
+    \begin{equation} \label{eq:I.20}
+        s(T) = \frac{2\pi^2}{45} g_{\star s}(T) T^3
+    \end{equation}
+    is the SM entropy density and $g_{\star s}(T)$ the number of relativistic degrees of freedom contributing to the DM entropy. Take $g_{\star s}(T) = g_\star(T)$, which is a good approximation for temperatures higher than a few MeVs.
+    
+    \item For wisely chosen values of $m$ and $\langle \sigma v \rangle$,\footnote{Wisely means masses in the GeV to TeV ballpark and cross sections at the picobarn scale!} solve Eq.~(\ref{eq:I.19}). Recall that observations of the DM relic density require that at low temperatures (i.e. $x \gg 100$)
+    \begin{equation} \label{eq:I.21}
+        Y \times m \simeq 4.3 \times 10^{-10} \text{ GeV}.
+    \end{equation}
+as shown in Appendix~\ref{sec:today}
+    
+    For the initial conditions (yes, a first-order differential equation requires an initial condition!), take $x_{\text{ini}} = 15$ and $Y(x_{\text{ini}}) = Y^{\text{eq}}(x_{\text{ini}})$. For a given DM mass, what is the required value of $\langle \sigma v \rangle$? Calculate $\langle \sigma v \rangle$ in GeV$^{-2}$, picobarns, and cm$^3$/s.
+    
+    \item How does the relic abundance (i.e. $Y$) evolve with an increase / decrease of $\langle \sigma v \rangle$?
+    \item Play wildly with the initial conditions $x_{\text{ini}}$ and $Y(x_{\text{ini}})$.
+    \item Repeat point 4 for other values of $m$, and plot $\langle \sigma v \rangle$ versus $m$.
+    \item Considering the simple parametrization
+    \begin{equation} \label{eq:I.22}
+        \langle \sigma v \rangle = \frac{\alpha^2}{m^2} \, ,
+    \end{equation}
+    with $\alpha$ a dimensionless coupling, plot $\alpha$ versus $m$. What is the maximal WIMP DM mass compatible with perturbativity?
+    
+    \item One can go one step forward and take into account the temperature dependence of $g_\star$ and $g_{\star s}$. Use the tabulated values of $g_\star$ and $g_{\star s}$ in the file \texttt{Data/hgEff/DHS.thg} of MicrOMEGAs. In their notation heff = $g_{\star s}$ while geff = $g_\star$. Plot again $\langle \sigma v \rangle$ versus $m$ taking now into account the variation of $g_\star$ and $g_{\star s}$.
+    
+    \item Decrease the (constant) value of $\langle \sigma v \rangle$ without fear. Use the initial conditions $x_{\text{ini}} = 10^{-1}$ and $Y(x_{\text{ini}}) = 0$. Discover a second solution satisfying Eq.~(\ref{eq:I.21}) and corresponding to ultraviolet freeze-in (UV FIMP) paradigm. Why is this freeze-in mechanism called \textit{ultraviolet}?
+    
+    \item How does the relic abundance (i.e. $Y$) evolve with an increase / decrease of $\langle \sigma v \rangle$?
+    \item Play wildly with the initial conditions $x_{\text{ini}}$ and $Y(x_{\text{ini}})$.
+    \item Plot $\langle \sigma v \rangle$ versus $m$ for UV FIMPs.
+    
+    \item Repeat the WIMP analysis, now for DM semi-annihilation (i.e. reactions DM + DM $\to$ DM + SM)
+    \begin{equation} \label{eq:I.23}
+        \frac{dY}{dx} = -\frac{\langle \sigma v \rangle s}{x H} \left[ Y^2 - Y Y^{\text{eq}} \right].
+    \end{equation}
+    
+    \item Repeat the WIMP analysis, now for 3-to-2 SIMP DM self-annihilation (i.e. reactions DM + DM + DM $\to$ DM + DM)
+    \begin{equation} \label{eq:I.24}
+        \frac{dY}{dx} = -\frac{\langle \sigma v^2 \rangle_{\text{3-to-2}} \, s^2}{x H} \left[ Y^3 - Y^2 Y^{\text{eq}} \right].
+    \end{equation}
+    
+    \item Considering the simple parametrization
+    \begin{equation} \label{eq:I.25}
+        \langle \sigma v^2 \rangle_{\text{3-to-2}} = \frac{\alpha^3}{m^5} \, ,
+    \end{equation}
+    with $\alpha$ a dimensionless coupling, plot $\alpha$ versus $m$. What is the maximal SIMP DM mass compatible with perturbativity?
+    
+    \item Forget assumptions \textit{i)} and \textit{ii)}. Assume instead the existence of a long-lived non-relativistic particle $\phi$ of mass $m_\phi$, that only decays into SM particles with a total decay width $\Gamma_\phi$ corresponding to a lifetime $\tau_\phi = 1/\Gamma_\phi \sim 1$ s. The evolution of the number density $n_\phi$ of $\phi$ and the SM radiation energy density $\rho_R$ can be tracked by the system of coupled Boltzmann equations
+    \begin{equation} \label{eq:I.26}
+        \frac{dn_\phi}{dt} + 3 H n = -\Gamma_\phi n_\phi \, ,
+    \end{equation}
+    \begin{equation} \label{eq:I.27}
+        \frac{d\rho_R}{dt} + 4 H \rho_R = +\Gamma_\phi n_\phi m_\phi \, ,
+    \end{equation}
+    and the Friedmann equation
+    \begin{equation} \label{eq:I.28}
+        H = \sqrt{\frac{\rho_R + m_\phi n_\phi}{3 M_P}} \, ,
+    \end{equation}
+    where $\rho_\phi = m_\phi n_\phi$ is the energy density of $\phi$. Rewrite Eqs.~(\ref{eq:I.26}), (\ref{eq:I.27}) and (\ref{eq:I.28}) in terms of the comoving quantities $\Phi \equiv n_\phi \times a^3$, $R \equiv \rho_R \times a^4$, and the cosmic scale factor $a$. Solve numerically the new equations, looking for periods where $\phi$ dominates the total energy density of the Universe. Extract the evolution of the SM temperature using Eq.~(\ref{eq:I.17}). Use the initial condition $a_{\text{ini}} = 1$ with $\rho_R(a_{\text{ini}}) = 0$ and $\rho_\phi(a_{\text{ini}}) \neq 0$ for a reheating-like scenario or $\rho_R(a_{\text{ini}}) \gg \rho_\phi(a_{\text{ini}}) > 0$ and for an early matter domination era. Recall that $H(T) < 2 \times 10^{-5}$ $M_P$.
+    
+    \item Rewrite Eq.~(\ref{eq:I.15}) using $N \equiv n \times a^3$ and $a$. Solve it in the previously discussed background. Understand WIMPs during low-temperature reheating, and WIMPs during an early matter dominated era.
+\end{enumerate}
+
+\newpage
+\appendix
+
+\section{Detailed derivation of Equation (I.19) from (I.15)}
+\label{sec:yieldBE}
+
+To get from Equation \eqref{eq:I.15} to Equation \eqref{eq:I.19}, a change of variables is required. The original equation is written in terms of the \textbf{number density $n$} and the \textbf{cosmological time $t$}. However, because the Universe is expanding, $n$ naturally decreases due to volumetric expansion (dilution), which complicates the numerical treatment. 
+
+To solve this, dimensionless or normalized variables are introduced: the abundance (or \textit{yield}) \textbf{$Y \equiv n/s$} (to factor out the expansion of the Universe) and the variable \textbf{$x \equiv m/T$} (which serves as an inverse ``clock'' for the temperature).
+
+Below is the detailed algebraic step-by-step derivation:
+conveniently
+\subsection*{Step 1: Introduce the variable $Y$ and use the product rule}
+We define the abundance $Y$ as the ratio between the number density $n$ and the Standard Model entropy density $s$:
+\begin{equation}
+    Y \equiv \frac{n}{s} \implies n = Y s
+\end{equation}
+We take the derivative of $n$ with respect to time $t$ using the product rule:
+\begin{equation}
+    \frac{dn}{dt} = \frac{d(Y s)}{dt} = s \frac{dY}{dt} + Y \frac{ds}{dt}
+\end{equation}
+Substituting this into the left-hand side (LHS) of the original Boltzmann equation~\eqref{eq:I.15} yields:
+\begin{equation}
+    \text{LHS} = \frac{dn}{dt} + 3Hn = s \frac{dY}{dt} + Y \frac{ds}{dt} + 3H(Y s)
+\end{equation}
+Grouping the terms proportional to $Y$:
+\begin{equation}
+    \text{LHS} = s \frac{dY}{dt} + Y \left( \frac{ds}{dt} + 3Hs \right)
+\end{equation}
+
+\subsection*{Step 2: Apply entropy conservation}
+Hypothesis \textit{ii)} assumes the \textbf{conservation of the Standard Model entropy}. The total entropy in a comoving volume $S = s a^3$ is constant (where $a$ is the scale factor of the Universe). Therefore, its time derivative is zero:
+\begin{equation}
+    \frac{d}{dt}(s a^3) = \frac{ds}{dt}a^3 + s(3a^2 \dot{a}) = 0
+\end{equation}
+Dividing the entire expression by $a^3$ and recalling that the Hubble parameter is defined as $H = \frac{\dot{a}}{a}$, we obtain the entropy density conservation equation:
+\begin{equation}
+    \frac{ds}{dt} + 3Hs = 0
+\end{equation}
+Substituting this result into our LHS from Step 1, the term inside the parentheses cancels out exactly:
+\begin{equation}
+    \text{LHS} = s \frac{dY}{dt} + Y (0) = s \frac{dY}{dt}
+\end{equation}
+Our original Boltzmann equation has now been immensely simplified to:
+\begin{equation}
+    s \frac{dY}{dt} = -\langle\sigma v\rangle \left(n^2 - n_{\text{eq}}^2\right)
+\end{equation}
+
+\subsection*{Step 3: Rewrite the right-hand side in terms of $Y$}
+We know that $n = Ys$ and, by definition of the equilibrium abundance, $n_{\text{eq}} = Y^{\text{eq}}s$. We substitute this into the right-hand side (RHS):
+\begin{equation}
+    s \frac{dY}{dt} = -\langle\sigma v\rangle \left( (Ys)^2 - (Y^{\text{eq}}s)^2 \right)
+\end{equation}
+Factoring out $s^2$:
+\begin{equation}
+    s \frac{dY}{dt} = -\langle\sigma v\rangle s^2 \left[ Y^2 - (Y^{\text{eq}})^2 \right]
+\end{equation}
+We divide both sides by the entropy density $s$:
+\begin{equation}
+\label{eq:partialyield}
+    \frac{dY}{dt} = -\langle\sigma v\rangle s \left[ Y^2 - (Y^{\text{eq}})^2 \right]
+\end{equation}
+
+\subsection*{Step 4: Transform the time derivative $t$ to the variable $x$}
+We now need to change the derivative with respect to time ($d/{dt}$) to a derivative with respect to $x$, (${d}/{dx}$), where \textbf{$x = m/T$}.
+By the chain rule:
+\begin{equation} \label{eq:chain}
+    \frac{dY}{dt} = \frac{dY}{dx} \frac{dx}{dt}
+\end{equation}
+We need to find ${dx}/{dt}$. We know that the comoving entropy is conserved ($s a^3 = \text{constant}$). According to Equation \eqref{eq:I.20}, $s \propto g_{\star s} T^3$. Assuming that the degrees of freedom $g_{\star s}$ are approximately constant in the regime of interest, we have:
+\begin{equation}
+    T^3 a^3 \propto \text{constant} \implies T \propto \frac{1}{a}
+\end{equation}
+Since $x = m/T$, this implies that $x \propto a$. Knowing that $x$ is directly proportional to the scale factor $a$, its relative rate of change is identical to the Hubble expansion rate $H$:
+\begin{equation}
+    H \equiv \frac{\dot{a}}{a} = \frac{\dot{x}}{x} = \frac{1}{x} \frac{dx}{dt}
+\end{equation}
+Solving for ${dx}/{dt}$, we obtain the transformation of the time parameter:
+\begin{equation}
+    \frac{dx}{dt} = x H\,,
+\end{equation}
+replacing back in eq.~\eqref{eq:chain}
+\begin{equation}
+\label{eq:dYdt}
+    \frac{dY}{dt} = xH \frac{dY}{dx}\,.
+\end{equation}
+
+\subsection*{Step 5: Final assembly}
+We substitute the result of the transformation~\eqref{eq:dYdt} into the equation~\eqref{eq:partialyield}:
+\begin{equation}
+    x H \frac{dY}{dx} = -\langle\sigma v\rangle s \left[ Y^2 - (Y^{\text{eq}})^2 \right]
+\end{equation}
+Finally, we isolate the derivative by passing the $x H$ term to divide the right-hand side:
+\begin{equation}
+    \frac{dY}{dx} = -\frac{\langle\sigma v\rangle s}{x H} \left[ Y^2 - (Y^{\text{eq}})^2 \right]
+\end{equation}
+This is exactly the convenient form presented in \textbf{Equation \eqref{eq:I.19}} of the tutorial, now ready for numerical integration using schemes like \texttt{scipy.integrate.odeint}.
+
+\section{Observational Constraint on the Dark Matter Relic Density}
+\label{sec:today}
+
+This appendix details the physical meaning of Equation (\ref{eq:I.21}) and the derivation of the numerical constant $4.3 \times 10^{-10}$ GeV.
+
+\subsection*{1. The Physical Meaning of the Variables}
+\begin{itemize}
+    \item \textbf{$Y$ (Yield):} As demonstrated in Appendix A, $Y \equiv n/s$ is the ratio of the DM number density to the entropy density of the Universe. After the DM freezes out (when $x \gg 100$), $Y$ becomes a constant asymptotic value, $Y_\infty$.
+    \item \textbf{$m$ (Mass):} The mass of the dark matter particle.
+    \item \textbf{$Y \times m$:} Since the mass-energy density of dark matter is $\rho_{\text{DM}} = n \times m$, the product $Y \times m$ represents the ratio of the dark matter energy density to the entropy density:
+    \begin{equation}
+        Y \times m = \frac{n \cdot m}{s} = \frac{\rho_{\text{DM}}}{s}
+    \end{equation}
+\end{itemize}
+Because both the dark matter energy density $\rho_{\text{DM}}$ and the entropy density $s$ dilute as $1/a^3$ due to the expansion of the Universe, their ratio $\rho_{\text{DM}}/s$ remains constant from the moment of freeze-out until today.
+
+\subsection*{2. Derivation of the Numerical Value}
+Cosmologists usually express the present-day dark matter abundance in terms of the density parameter $\Omega_{\text{DM}} h^2$, which is the ratio of the DM energy density to the critical density of the Universe. According to the latest Cosmic Microwave Background measurements (e.g., Planck 2018), the observed value is:
+\begin{equation}
+    \Omega_{\text{DM}} h^2 \simeq 0.12
+\end{equation}
+By definition, the present-day energy density of dark matter is:
+\begin{equation}
+    \rho_{\text{DM},0} = \Omega_{\text{DM}} \rho_{c,0}
+\end{equation}
+where $\rho_{c,0}$ is the critical density of the Universe today. We can also rewrite the dark matter energy density using the present-day yield $Y_0$ (which is equal to the asymptotic yield $Y_\infty$) and the present-day entropy density $s_0$:
+\begin{equation}
+    \rho_{\text{DM},0} = m \cdot n_0 = m \cdot Y_0 \cdot s_0
+\end{equation}
+Equating these two expressions for $\rho_{\text{DM},0}$, we obtain:
+\begin{equation}
+    m \cdot Y_0 \cdot s_0 = \Omega_{\text{DM}} \rho_{c,0}
+\end{equation}
+Now, we solve for the product $Y_0 \times m$:
+\begin{equation}
+    Y_0 \times m = \Omega_{\text{DM}} h^2 \left( \frac{\rho_{c,0}/h^2}{s_0} \right)
+\end{equation}
+To find the numerical value, we plug in the known cosmological constants for the present-day Universe:
+\begin{itemize}
+    \item \textbf{Present-day entropy density} (from photons and neutrinos): $s_0 \approx 2891.2 \text{ cm}^{-3}$
+    \item \textbf{Present-day critical density} (normalized by $h^2$): $\rho_{c,0}/h^2 \approx 1.054 \times 10^{-5} \text{ GeV cm}^{-3}$
+\end{itemize}
+Substituting these values:
+\begin{equation}
+    Y \times m = 0.12 \times \left( \frac{1.054 \times 10^{-5} \text{ GeV cm}^{-3}}{2891.2 \text{ cm}^{-3}} \right)
+\end{equation}
+\begin{equation}
+    Y \times m \approx 0.12 \times \left( 3.645 \times 10^{-9} \text{ GeV} \right)
+\end{equation}
+\begin{equation}
+    Y \times m \approx 4.37 \times 10^{-10} \text{ GeV}
+\end{equation}
+which perfectly matches the constraint given in Equation (\ref{eq:I.21}).
+
+\subsection*{Summary}
+When solving the Bol
+\end{document}tzmann equation numerically (as requested in point 4 of the tutorial), the integration will yield a curve for $Y(x)$ that eventually flattens out to a constant value at large $x$. To determine if the chosen dark matter mass $m$ and annihilation cross-section $\langle \sigma v \rangle$ represent a physically viable model, one simply multiplies the final flattened $Y$ value by the mass $m$. If the result is $\simeq 4.3 \times 10^{-10}$ GeV, then the model correctly predicts 100\% of the dark matter observed in the Universe today.
+
+\end{document}
